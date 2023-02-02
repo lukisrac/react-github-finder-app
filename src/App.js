@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from 'react';
+import SearchContext from './store/search-context';
+
+import Container from './components/Container';
+import Header from './components/Header';
+import Search from './components/Search';
+import Spinner from './components/Spinner';
+import User from './components/User';
+import UsersList from './components/UsersList';
 
 function App() {
+  const ctx = useContext(SearchContext);
+  const user = ctx.user;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Container>
+        <Search />
+        {ctx.isLoading ? <Spinner /> : null}
+        {ctx.hasResults && !ctx.isLoading ? <UsersList /> : null}
+        {user && !ctx.isLoading ? <User user={user} /> : null}
+      </Container>
+    </>
   );
 }
 
